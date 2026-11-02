@@ -12,8 +12,3 @@ variable "owner" {
   description = "Valor del tag Owner (p. ej. tu email o nombre)"
   type        = string
 }
-
-variable "github_repo" {
-  description = "Repositorio en formato owner/nombre, p. ej. danielmaradey/bookslot-cinema"
-  type        = string
-}
