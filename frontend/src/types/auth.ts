@@ -7,6 +7,7 @@ export interface SessionUser {
 
 export interface AuthContextValue {
   user: SessionUser | null;
-  signIn(user: Omit<SessionUser, 'id'>): void;
+  signInDemo(user: Omit<SessionUser, 'id'>): void;
+  signIn(email: string, password: string): Promise<void>;
   signOut(): void;
 }

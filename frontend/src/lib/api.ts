@@ -16,9 +16,11 @@ export class ApiError extends Error {
   }
 }
 
-let authHeaders: () => Record<string, string> = () => ({});
+type HeadersProvider = () => Record<string, string> | Promise<Record<string, string>>;
 
-export function setAuthHeaders(provider: () => Record<string, string>) {
+let authHeaders: HeadersProvider = () => ({});
+
+export function setAuthHeaders(provider: HeadersProvider) {
   authHeaders = provider;
 }
 
@@ -29,7 +31,7 @@ async function request<T>(method: string, path: string, body?: unknown, headers:
       method,
       headers: {
         ...(body === undefined ? {} : { 'content-type': 'application/json' }),
-        ...authHeaders(),
+        ...(await authHeaders()),
         ...headers,
       },
       body: body === undefined ? undefined : JSON.stringify(body),

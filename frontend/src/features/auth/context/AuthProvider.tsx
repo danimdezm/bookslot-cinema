@@ -1,18 +1,25 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { signIn as cognitoSignIn } from '@/lib/cognito';
 import type { SessionUser } from '@/types';
 import { AuthContext } from './AuthContext';
-import { clearUser, currentUser, saveUser } from './session';
+import { clearSession, currentUser, onSessionChange, saveDemoUser, saveTokens } from './session';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<SessionUser | null>(currentUser);
 
-  const signIn = useCallback((data: Omit<SessionUser, 'id'>) => setUser(saveUser(data)), []);
-
-  const signOut = useCallback(() => {
-    clearUser();
-    setUser(null);
+  useEffect(() => {
+    const unsubscribe = onSessionChange(setUser);
+    return () => void unsubscribe();
   }, []);
 
-  const value = useMemo(() => ({ user, signIn, signOut }), [user, signIn, signOut]);
+  const signInDemo = useCallback((data: Omit<SessionUser, 'id'>) => void saveDemoUser(data), []);
+
+  const signIn = useCallback(async (email: string, password: string) => {
+    saveTokens(await cognitoSignIn(email, password));
+  }, []);
+
+  const signOut = useCallback(() => clearSession(), []);
+
+  const value = useMemo(() => ({ user, signInDemo, signIn, signOut }), [user, signInDemo, signIn, signOut]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
