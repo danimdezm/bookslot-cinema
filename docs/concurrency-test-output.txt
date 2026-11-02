@@ -1,0 +1,20 @@
+== BookSlot · prueba de concurrencia
+   API=http://localhost:3000  N=100 peticiones simultáneas  M=20 butacas  K=10 reintentos idempotentes
+   sesión aba223c4-4a2f-4232-b720-f8688878774d
+
+-- Fase 1: 100 reservas simultáneas (~1000 ms)
+   201 CONFIRMED (hold)  = 20   (esperado 20)
+   409 SOLD_OUT          = 80   (esperado 80)
+   otros códigos         = 0
+   butacas duplicadas    = 0
+
+-- Fase 2: confirmación de pago de los 20 holds
+   reservas confirmadas  = 20   (esperado 20)
+   butacas BOOKED        = 20   (esperado 20)
+   plazas libres         = 0   (esperado 0)
+
+-- Fase 3: 10 reintentos simultáneos con la misma Idempotency-Key
+   holds distintos       = 1   (esperado 1)
+   butacas retenidas     = 2   (esperado 2)
+
+RESULTADO: OK — sin overbooking (20 de 100) e idempotencia correcta
