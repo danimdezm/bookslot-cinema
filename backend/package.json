@@ -1,0 +1,43 @@
+{
+  "name": "@bookslot/backend",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "tsx watch src/local/server.ts",
+    "start:local": "tsx src/local/server.ts",
+    "seed": "tsx src/local/seed.ts",
+    "build": "tsx build.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:all": "vitest run"
+  },
+  "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.1152.0",
+    "@aws-sdk/client-dynamodb": "^3.1152.0",
+    "@aws-sdk/client-dynamodb-streams": "^3.1152.0",
+    "@aws-sdk/client-eventbridge": "^3.1152.0",
+    "@aws-sdk/client-scheduler": "^3.1152.0",
+    "@aws-sdk/client-secrets-manager": "^3.1152.0",
+    "@aws-sdk/client-sesv2": "^3.1152.0",
+    "@aws-sdk/lib-dynamodb": "^3.1152.0",
+    "@aws-sdk/util-dynamodb": "^3.996.9",
+    "nodemailer": "^10.1.7",
+    "stripe": "^23.0.0",
+    "ws": "^8.22.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.164",
+    "@types/node": "^24.19.2",
+    "@types/nodemailer": "^8.0.2",
+    "@types/ws": "^8.18.2",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^3.2.7"
+  }
+}
