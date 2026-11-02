@@ -1,0 +1,33 @@
+version: 0.2
+
+env:
+  variables:
+    TF_VERSION: 1.16.6
+    TF_DIR: infra/envs/prod
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 24
+    commands:
+      - cd /tmp
+      - curl -sSfO https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+      - curl -sSfO https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_SHA256SUMS
+      - grep linux_amd64 terraform_${TF_VERSION}_SHA256SUMS | sha256sum -c
+      - unzip -o -q terraform_${TF_VERSION}_linux_amd64.zip -d /usr/local/bin
+      - cd "$CODEBUILD_SRC_DIR"
+      - corepack enable
+      - pnpm install --frozen-lockfile
+
+  pre_build:
+    commands:
+      - pnpm typecheck
+      - pnpm test
+
+  build:
+    commands:
+      - pnpm --filter @bookslot/backend build
+      - terraform -chdir=$TF_DIR init -input=false -backend-config="bucket=$TF_STATE_BUCKET"
+      - terraform -chdir=$TF_DIR apply -input=false -auto-approve
+      - scripts/deploy-frontend.sh
+      - curl -sSf "$(terraform -chdir=$TF_DIR output -raw api_endpoint)/health"
