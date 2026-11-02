@@ -1,0 +1,1 @@
+export { ShowsTable } from './ShowsTable';

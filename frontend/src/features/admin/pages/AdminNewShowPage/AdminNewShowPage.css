@@ -1,0 +1,24 @@
+.new-show {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.new-show__preview {
+  display: grid;
+  gap: 16px;
+}
+
+.new-show__preview p {
+  margin: 6px 0 0;
+}
+
+@media (max-width: 860px) {
+  .new-show {
+    grid-template-columns: 1fr;
+  }
+  .new-show__preview .poster {
+    max-width: 200px;
+  }
+}

@@ -1,0 +1,22 @@
+.seg-link {
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 13.5px;
+  white-space: nowrap;
+  transition: color 0.2s, background 0.25s var(--ease);
+}
+
+.seg-link:hover {
+  color: var(--text);
+}
+
+.seg-link.active {
+  background: var(--surface-3);
+  color: var(--text);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--line-strong) inset;
+}

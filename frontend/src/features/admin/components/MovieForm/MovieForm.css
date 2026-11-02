@@ -1,0 +1,23 @@
+.catalog-form {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 24px;
+}
+
+.catalog-form__preview {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  text-align: center;
+  font-size: 12px;
+}
+
+@media (max-width: 560px) {
+  .catalog-form {
+    grid-template-columns: 1fr;
+  }
+  .catalog-form__preview {
+    width: 160px;
+    justify-self: center;
+  }
+}

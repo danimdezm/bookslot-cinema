@@ -1,0 +1,36 @@
+.room-preview {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 18px;
+  border-radius: var(--r);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  font-size: 12px;
+}
+
+.room-preview__screen {
+  width: 70%;
+  height: 10px;
+  margin-bottom: 10px;
+  border-top: 2px solid var(--accent);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  box-shadow: 0 -6px 16px -6px var(--accent-glow);
+}
+
+.room-preview__row {
+  display: flex;
+  gap: 3px;
+}
+
+.room-preview__row i {
+  width: 7px;
+  height: 6px;
+  border-radius: 2px 2px 1px 1px;
+  background: var(--surface-3);
+}
+
+.room-preview > span {
+  margin-top: 8px;
+}

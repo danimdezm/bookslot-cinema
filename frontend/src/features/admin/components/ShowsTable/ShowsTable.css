@@ -1,0 +1,13 @@
+.cell-sub {
+  display: block;
+  font-size: 12.5px;
+}
+
+.cell-link {
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.cell-link:hover {
+  color: var(--accent);
+}
