@@ -24,7 +24,7 @@ variable "alarm_email" {
 
 variable "monthly_budget_usd" {
   type    = number
-  default = 20
+  default = 10
 }
 
 variable "deletion_protection" {
