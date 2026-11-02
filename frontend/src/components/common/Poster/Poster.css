@@ -1,0 +1,115 @@
+.poster {
+  --h1: 30;
+  --h2: 10;
+  --h3: 210;
+  --sx: 50%;
+  --sy: 30%;
+  position: relative;
+  aspect-ratio: 2 / 3;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--r);
+  isolation: isolate;
+  background: hsl(var(--h1) 40% 9%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  container-type: inline-size;
+}
+
+.poster__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.poster__art,
+.poster__grain {
+  position: absolute;
+  inset: 0;
+}
+
+.poster__art {
+  background:
+    radial-gradient(circle at var(--sx) var(--sy), hsl(var(--h2) 95% 70% / 0.95) 0 9%, hsl(var(--h2) 90% 55% / 0.35) 10%, transparent 34%),
+    radial-gradient(120% 70% at 50% 110%, hsl(var(--h3) 70% 40% / 0.55), transparent 60%),
+    linear-gradient(170deg, hsl(var(--h1) 55% 22%) 0%, hsl(var(--h1) 45% 10%) 55%, hsl(var(--h1) 40% 5%) 100%);
+}
+
+.poster--horizon .poster__art {
+  background:
+    repeating-linear-gradient(180deg, transparent 0 9px, hsl(var(--h2) 90% 65% / 0.22) 9px 10px),
+    radial-gradient(160% 50% at 50% 62%, hsl(var(--h2) 95% 62% / 0.85), transparent 45%),
+    linear-gradient(180deg, hsl(var(--h3) 50% 14%) 0%, hsl(var(--h1) 60% 24%) 58%, hsl(var(--h1) 40% 6%) 62%, hsl(var(--h1) 35% 4%) 100%);
+}
+
+.poster--beam .poster__art {
+  background:
+    conic-gradient(from 200deg at var(--sx) -10%, transparent 0deg, hsl(var(--h2) 95% 68% / 0.55) 12deg, transparent 26deg, transparent 40deg, hsl(var(--h2) 95% 68% / 0.3) 48deg, transparent 60deg),
+    radial-gradient(90% 60% at 50% 100%, hsl(var(--h3) 70% 35% / 0.5), transparent 70%),
+    linear-gradient(180deg, hsl(var(--h1) 30% 8%), hsl(var(--h1) 45% 14%));
+}
+
+.poster--orbit .poster__art {
+  background:
+    radial-gradient(circle at var(--sx) 38%, transparent 0 20%, hsl(var(--h2) 90% 70% / 0.7) 20.5% 21.3%, transparent 22%),
+    radial-gradient(circle at var(--sx) 38%, hsl(var(--h3) 80% 55% / 0.9) 0 13%, transparent 13.5%),
+    radial-gradient(circle at var(--sx) 38%, hsl(var(--h2) 90% 60% / 0.45), transparent 50%),
+    linear-gradient(180deg, hsl(var(--h1) 40% 6%), hsl(var(--h1) 50% 16%));
+}
+
+.poster__grain {
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.poster::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.75) 100%);
+}
+
+.poster__content {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  display: grid;
+  gap: 4cqw;
+  padding: 8cqw 8cqw 7cqw;
+  text-align: center;
+}
+
+.poster__studio {
+  font-size: max(7px, 3.6cqw);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.poster__title {
+  font-family: var(--font-display);
+  font-size: 15cqw;
+  line-height: 0.92;
+  color: #fff8ee;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.6);
+  text-wrap: balance;
+}
+
+.poster__credits {
+  font-size: max(6px, 3.2cqw);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 3cqw;
+}
+
+.poster--sm {
+  width: 64px;
+  flex: none;
+  border-radius: 10px;
+}
+
+.poster--sm .poster__content {
+  display: none;
+}
