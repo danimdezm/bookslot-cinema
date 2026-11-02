@@ -20,8 +20,9 @@ data "aws_iam_policy_document" "assume" {
 }
 
 resource "aws_iam_role" "this" {
-  name               = var.name
-  assume_role_policy = data.aws_iam_policy_document.assume.json
+  name                 = "${var.role_prefix}${var.name}"
+  assume_role_policy   = data.aws_iam_policy_document.assume.json
+  permissions_boundary = var.permissions_boundary
 }
 
 data "aws_iam_policy_document" "base" {

@@ -43,3 +43,13 @@ variable "log_retention_days" {
   type    = number
   default = 30
 }
+
+variable "role_prefix" {
+  type    = string
+  default = ""
+}
+
+variable "permissions_boundary" {
+  type    = string
+  default = null
+}

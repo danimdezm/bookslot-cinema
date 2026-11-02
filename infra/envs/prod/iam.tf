@@ -2,8 +2,10 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 locals {
-  table_resources = [module.table.arn, "${module.table.arn}/index/*"]
-  schedules_arn   = "arn:aws:scheduler:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:schedule/${aws_scheduler_schedule_group.this.name}/*"
+  role_prefix          = var.iam_role_prefix
+  permissions_boundary = var.permissions_boundary_name == "" ? null : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${var.permissions_boundary_name}"
+  table_resources      = [module.table.arn, "${module.table.arn}/index/*"]
+  schedules_arn        = "arn:aws:scheduler:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:schedule/${aws_scheduler_schedule_group.this.name}/*"
 }
 
 data "aws_iam_policy_document" "table_read" {
@@ -128,8 +130,9 @@ data "aws_iam_policy_document" "scheduler_assume" {
 }
 
 resource "aws_iam_role" "scheduler" {
-  name               = "${local.name_prefix}-scheduler"
-  assume_role_policy = data.aws_iam_policy_document.scheduler_assume.json
+  name                 = "${local.role_prefix}${local.name_prefix}-scheduler"
+  assume_role_policy   = data.aws_iam_policy_document.scheduler_assume.json
+  permissions_boundary = local.permissions_boundary
 }
 
 data "aws_iam_policy_document" "scheduler_invoke" {

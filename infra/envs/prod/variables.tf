@@ -48,3 +48,15 @@ variable "payment_provider" {
     error_message = "payment_provider debe ser mock o stripe."
   }
 }
+
+variable "iam_role_prefix" {
+  description = "Prefijo obligatorio de los roles IAM en la cuenta del laboratorio"
+  type        = string
+  default     = "student-"
+}
+
+variable "permissions_boundary_name" {
+  description = "Permissions boundary que exige la cuenta del laboratorio (vacío para no usarla)"
+  type        = string
+  default     = "StudentBoundary"
+}
