@@ -1,0 +1,21 @@
+.footer {
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+  padding-block: 36px calc(36px + env(safe-area-inset-bottom, 0px));
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+}
+
+.footer__inner p {
+  margin: 0;
+  font-size: 13.5px;
+}
+
+.footer__inner .faint {
+  margin-left: auto;
+}

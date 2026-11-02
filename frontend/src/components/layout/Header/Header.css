@@ -1,0 +1,54 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--header-h);
+  padding-top: env(safe-area-inset-top, 0px);
+  box-sizing: content-box;
+  transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
+  border-bottom: 1px solid transparent;
+}
+
+.header--scrolled {
+  background: rgba(12, 11, 10, 0.72);
+  backdrop-filter: saturate(140%) blur(18px);
+  border-bottom-color: var(--line);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 3vw, 36px);
+  height: 100%;
+}
+
+.nav {
+  display: flex;
+  gap: 4px;
+}
+
+.nav a {
+  position: relative;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.2s, background 0.2s;
+}
+
+.nav a:hover {
+  color: var(--text);
+}
+
+.nav a.active {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 640px) {
+  .nav a {
+    padding: 8px 10px;
+    font-size: 13.5px;
+  }
+}
