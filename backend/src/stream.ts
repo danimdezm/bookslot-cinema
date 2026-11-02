@@ -27,6 +27,7 @@ export async function processStreamRecords(records: DynamoDBRecord[]): Promise<v
     const type = next.type as string;
 
     if (type === 'SEAT') {
+      if (!prev) continue;
       const showId = next.showId as string;
       const list = seatChanges.get(showId) ?? [];
       list.push({ seatId: next.seatId as string, status: next.status as SeatStatus });
