@@ -1,0 +1,43 @@
+.show-head {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.show-head__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.show-head__title {
+  font-size: clamp(38px, 6vw, 64px);
+  margin-bottom: 8px;
+}
+
+.show-head p {
+  margin: 0;
+}
+
+.show-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 24px;
+  align-items: start;
+}
+
+.seatmap-card {
+  overflow: hidden;
+  padding-top: 8px;
+}
+
+@media (max-width: 960px) {
+  .show-layout {
+    grid-template-columns: 1fr;
+  }
+  .seatmap-card {
+    padding-inline: 10px;
+  }
+}

@@ -1,0 +1,16 @@
+.show-info {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.show-info > div {
+  display: grid;
+  gap: 2px;
+  font-size: 13.5px;
+}
+
+.show-info strong {
+  font-size: 16px;
+}
+

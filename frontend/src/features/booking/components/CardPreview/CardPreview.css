@@ -1,0 +1,46 @@
+.card-visual {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  aspect-ratio: 1.586;
+  max-width: 380px;
+  padding: 24px;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgba(255, 210, 126, 0.55), transparent 55%),
+    radial-gradient(80% 80% at 0% 100%, rgba(255, 122, 69, 0.45), transparent 60%),
+    linear-gradient(135deg, #2b2016, #120d09);
+  border: 1px solid rgba(255, 210, 126, 0.25);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+
+.card-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.12) 48%, transparent 60%);
+}
+
+.card-visual__chip {
+  width: 44px;
+  height: 32px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #f8dc9b, #b8862e);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2) inset;
+}
+
+.card-visual__number {
+  font-size: clamp(17px, 3.4vw, 22px);
+  letter-spacing: 0.12em;
+  color: #fff4e2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.card-visual__foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 244, 226, 0.75);
+}

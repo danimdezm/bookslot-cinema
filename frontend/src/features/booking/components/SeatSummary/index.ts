@@ -1,0 +1,1 @@
+export { SeatSummary } from './SeatSummary';

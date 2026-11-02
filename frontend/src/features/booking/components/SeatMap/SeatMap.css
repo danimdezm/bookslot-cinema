@@ -1,0 +1,221 @@
+.seatmap {
+  display: grid;
+  gap: 24px;
+}
+
+.screen {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding-top: 28px;
+  margin-inline: auto;
+  width: min(86%, 640px);
+}
+
+.screen__arc {
+  width: 100%;
+  height: 40px;
+  border-top: 3px solid var(--accent-hi);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  box-shadow: 0 -10px 30px -6px var(--accent-glow);
+  position: relative;
+}
+
+.screen__arc::after {
+  content: '';
+  position: absolute;
+  inset: 0 6% -60px;
+  background: radial-gradient(60% 100% at 50% 0%, rgba(255, 210, 126, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.screen span {
+  margin-top: -18px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.seatmap__scroll {
+  container-type: inline-size;
+  overflow-x: auto;
+  padding: 4px 4px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-3) transparent;
+}
+
+.seatmap__grid {
+  display: grid;
+  gap: 8px;
+  width: max-content;
+  margin-inline: auto;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seat-row__label {
+  width: 18px;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--faint);
+}
+
+.seat-row__seats {
+  display: flex;
+  justify-content: center;
+  gap: clamp(3px, calc(var(--seat, 30px) * 0.2), 6px);
+  flex: 1;
+}
+
+.seat {
+  --seat: clamp(15px, calc((100cqw - 64px) / var(--cols, 12) - 6px), 32px);
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--seat);
+  height: calc(var(--seat) * 0.92);
+  padding: 0;
+  border-radius: calc(var(--seat) * 0.3) calc(var(--seat) * 0.3) calc(var(--seat) * 0.16) calc(var(--seat) * 0.16);
+  border: 1.5px solid rgba(255, 236, 214, 0.3);
+  background: rgba(255, 236, 214, 0.05);
+  color: transparent;
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.2s var(--ease), background 0.2s, border-color 0.2s, box-shadow 0.25s, color 0.2s;
+}
+
+.seat::after {
+  content: '';
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: -5px;
+  height: 3px;
+  border-radius: 2px;
+  background: inherit;
+  border: inherit;
+  border-width: 0;
+  opacity: 0.6;
+}
+
+.seat--aisle {
+  margin-right: calc(var(--seat) * 0.7);
+}
+
+.seat--available:not(:disabled):hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-hi);
+}
+
+.seat--selected {
+  background: var(--grad);
+  border-color: transparent;
+  color: var(--accent-ink);
+  box-shadow: 0 6px 18px -4px var(--accent-glow);
+  animation: seat-pick 0.35s var(--ease);
+}
+
+.seat--held {
+  border-style: dashed;
+  border-color: rgba(243, 181, 74, 0.35);
+  background: repeating-linear-gradient(-45deg, rgba(243, 181, 74, 0.12) 0 3px, transparent 3px 6px);
+  cursor: not-allowed;
+}
+
+.seat--booked {
+  border-color: transparent;
+  background: rgba(255, 236, 214, 0.07);
+  cursor: not-allowed;
+}
+
+.seat--booked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 38%;
+  height: 1.5px;
+  border-radius: 1px;
+  background: rgba(255, 236, 214, 0.22);
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.seat:disabled:not(.seat--held):not(.seat--booked) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.seat--flash {
+  animation: seat-flash 1.2s var(--ease);
+}
+
+.seat--lost {
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 3px var(--danger-soft), 0 0 20px rgba(255, 107, 94, 0.5) !important;
+  animation: shake 0.45s;
+}
+
+@keyframes seat-pick {
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+@keyframes seat-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 210, 126, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(255, 210, 126, 0);
+  }
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 22px;
+  margin: 0;
+  padding: 16px 0 4px;
+  list-style: none;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend .seat {
+  --seat: 18px;
+  border-radius: 6px 6px 3px 3px;
+  pointer-events: none;
+  animation: none;
+  box-shadow: none;
+}
+
+.legend .seat::after {
+  display: none;
+}
