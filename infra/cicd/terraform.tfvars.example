@@ -1,0 +1,4 @@
+owner        = "daniel"
+github_repo  = "danimdezm/bookslot-cinema"
+alarm_email  = "tu-email@example.com"
+sender_email = "tu-email@example.com"
