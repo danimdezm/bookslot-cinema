@@ -1,0 +1,54 @@
+.booking-page {
+  position: relative;
+}
+
+.booking-page__head {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.booking-page__head h1 {
+  font-size: clamp(46px, 7vw, 84px);
+}
+
+.booking-page__head p {
+  margin: 0;
+  max-width: 56ch;
+}
+
+.booking-page__actions {
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.booking-page__rays {
+  position: absolute;
+  inset: -60px 0 auto;
+  height: 520px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background: conic-gradient(from 180deg at 50% 0%, transparent 150deg, rgba(255, 210, 126, 0.12) 165deg, transparent 172deg, rgba(255, 210, 126, 0.08) 180deg, transparent 188deg, rgba(255, 210, 126, 0.12) 195deg, transparent 210deg);
+  mask: linear-gradient(180deg, #000, transparent);
+}
+
+.booking-page--fresh .booking-page__rays {
+  animation: rays 2.4s var(--ease) both;
+}
+
+@keyframes rays {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.6);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+    transform: scaleY(1);
+  }
+}
