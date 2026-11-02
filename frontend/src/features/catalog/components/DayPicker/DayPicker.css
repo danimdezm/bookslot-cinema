@@ -1,0 +1,54 @@
+.day-picker {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 2px 12px;
+  margin-bottom: 28px;
+  scrollbar-width: none;
+}
+
+.day-picker__day {
+  flex: none;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 86px;
+  padding: 12px 14px;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-2);
+  transition: all 0.3s var(--ease);
+}
+
+.day-picker__day span {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.day-picker__day strong {
+  font-size: 17px;
+  color: var(--text);
+}
+
+.day-picker__day small {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.day-picker__day:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
+}
+
+.day-picker__day[aria-selected='true'] {
+  background: var(--grad);
+  border-color: transparent;
+  box-shadow: var(--shadow-glow);
+}
+
+.day-picker__day[aria-selected='true'] :is(span, strong, small) {
+  color: var(--accent-ink);
+}

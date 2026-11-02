@@ -1,0 +1,102 @@
+@media (max-width: 560px) {
+  .movie-card__body h3 {
+    font-size: 15px;
+  }
+  .movie-card__day {
+    display: none;
+  }
+}
+
+.movie-card {
+  display: grid;
+  gap: 16px;
+  animation: rise 0.7s var(--ease) both;
+}
+
+.movie-card__poster {
+  position: relative;
+  border-radius: var(--r);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+  box-shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.9);
+}
+
+.movie-card__poster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.16) 45%, transparent 60%);
+  background-size: 250% 100%;
+  background-position: 120% 0;
+  transition: background-position 0.9s var(--ease);
+  pointer-events: none;
+}
+
+.movie-card__cta {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 18px;
+  translate: -50% 8px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--grad);
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s, translate 0.4s var(--ease);
+}
+
+.movie-card:hover .movie-card__poster {
+  transform: translateY(-6px);
+  box-shadow: 0 40px 70px -30px rgba(0, 0, 0, 0.95), 0 20px 60px -40px var(--accent-glow);
+}
+
+.movie-card:hover .movie-card__poster::before {
+  background-position: -20% 0;
+}
+
+.movie-card:hover .movie-card__cta {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+.movie-card__body h3 {
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.movie-card__body p {
+  margin: 0;
+  font-size: 13.5px;
+}
+
+.movie-card__times {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.movie-card__day {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-right: 4px;
+}
+
+.time-pill {
+  padding: 4px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}

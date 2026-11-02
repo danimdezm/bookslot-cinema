@@ -1,0 +1,68 @@
+.show-tile {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  transition: transform 0.35s var(--ease), border-color 0.25s, box-shadow 0.35s var(--ease);
+}
+
+a.show-tile:hover {
+  transform: translateY(-4px);
+  border-color: rgba(243, 181, 74, 0.5);
+  box-shadow: 0 24px 50px -28px var(--accent-glow);
+}
+
+.show-tile__time {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.show-tile__room {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.show-tile__bar {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.show-tile__bar span {
+  display: block;
+  height: 100%;
+  background: var(--grad);
+}
+
+.show-tile__foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.show-tile__avail--ok {
+  color: var(--ok);
+}
+
+.show-tile__avail--warn {
+  color: var(--warn);
+}
+
+.show-tile__avail--danger {
+  color: var(--danger);
+}
+
+.show-tile__avail--muted {
+  color: var(--muted);
+}
+
+.show-tile--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

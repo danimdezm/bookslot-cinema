@@ -1,0 +1,70 @@
+.movie-hero {
+  position: relative;
+  overflow: hidden;
+  margin-top: calc(-1 * var(--header-h));
+  padding-top: var(--header-h);
+}
+
+.movie-hero__backdrop {
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  opacity: 0.5;
+  filter: blur(80px) saturate(1.4);
+}
+
+.movie-hero__backdrop .poster {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+}
+
+.movie-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(12, 11, 10, 0.3) 0%, var(--bg) 100%);
+}
+
+.movie-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(160px, 280px) 1fr;
+  align-items: end;
+  gap: clamp(24px, 5vw, 56px);
+  padding-block: clamp(32px, 6vw, 72px) 8px;
+}
+
+.movie-hero__poster {
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9);
+  animation: rise 0.7s var(--ease) both;
+}
+
+.movie-hero__info {
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+  padding-bottom: 12px;
+}
+
+.movie-hero__title {
+  font-size: clamp(48px, 8vw, 104px);
+  text-wrap: balance;
+}
+
+.movie-hero__desc {
+  margin: 0;
+  max-width: 56ch;
+  font-size: 17px;
+  color: var(--text-2);
+}
+
+@media (max-width: 640px) {
+  .movie-hero__inner {
+    grid-template-columns: 120px 1fr;
+    align-items: start;
+  }
+  .movie-hero__desc {
+    grid-column: 1 / -1;
+  }
+}
