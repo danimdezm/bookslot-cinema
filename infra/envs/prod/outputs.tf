@@ -34,3 +34,19 @@ output "stripe_secret_name" {
 output "event_bus_name" {
   value = module.events.bus_name
 }
+
+output "web_url" {
+  value = module.frontend.url
+}
+
+output "web_bucket" {
+  value = module.frontend.bucket
+}
+
+output "web_distribution_id" {
+  value = module.frontend.distribution_id
+}
+
+output "cognito_region" {
+  value = var.region
+}
