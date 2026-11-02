@@ -1,0 +1,114 @@
+.login {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  min-height: 100dvh;
+}
+
+.login__visual {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  align-content: end;
+  padding: clamp(32px, 5vw, 64px);
+  background: radial-gradient(80% 60% at 30% 30%, rgba(243, 181, 74, 0.14), transparent 70%), var(--bg-elev);
+  border-right: 1px solid var(--line);
+}
+
+.login__collage {
+  position: absolute;
+  inset: 0;
+}
+
+.login__poster {
+  position: absolute;
+  width: clamp(160px, 18vw, 260px);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9);
+  animation: float-in 1.1s var(--ease) both;
+}
+
+.login__poster--0 {
+  top: 8%;
+  left: 10%;
+  transform: rotate(-8deg);
+}
+
+.login__poster--1 {
+  top: 14%;
+  left: 40%;
+  transform: rotate(5deg);
+  animation-delay: 0.1s;
+  z-index: 1;
+}
+
+.login__poster--2 {
+  top: 4%;
+  right: -4%;
+  transform: rotate(-3deg);
+  animation-delay: 0.2s;
+}
+
+.login__visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 20%, var(--bg-elev) 72%);
+}
+
+.login__claim {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(56px, 8vw, 112px);
+}
+
+.login__panel {
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 5vw, 64px) var(--gutter);
+}
+
+.login__form {
+  width: min(100%, 440px);
+  display: grid;
+  gap: 18px;
+  box-shadow: var(--shadow);
+}
+
+.login__title {
+  font-size: 44px;
+}
+
+.login__form > p {
+  margin: -8px 0 6px;
+}
+
+.login__demo {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.login__dev {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .login {
+    grid-template-columns: 1fr;
+  }
+  .login__visual {
+    min-height: 300px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .login__poster {
+    width: 130px;
+  }
+}
