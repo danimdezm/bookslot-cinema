@@ -1,0 +1,8 @@
+packages:
+  - backend
+  - frontend
+
+minimumReleaseAge: 20160
+
+allowBuilds:
+  esbuild: true

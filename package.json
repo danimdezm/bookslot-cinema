@@ -1,0 +1,17 @@
+{
+  "name": "bookslot",
+  "private": true,
+  "packageManager": "pnpm@11.28.6",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev:api": "pnpm --filter @bookslot/backend dev",
+    "dev:web": "pnpm --filter @bookslot/frontend dev",
+    "seed": "pnpm --filter @bookslot/backend seed",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm --filter @bookslot/backend test",
+    "test:integration": "pnpm --filter @bookslot/backend test:integration"
+  }
+}
