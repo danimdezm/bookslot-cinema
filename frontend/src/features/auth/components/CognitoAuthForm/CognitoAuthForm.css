@@ -1,0 +1,20 @@
+.cognito-auth {
+  display: grid;
+  gap: 18px;
+}
+
+.cognito-auth__hint {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.cognito-auth__switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--muted);
+}
