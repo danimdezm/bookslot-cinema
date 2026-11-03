@@ -9,7 +9,7 @@ Plataforma de reserva de entradas de cine con butacas numeradas y disponibilidad
 - Reservas idempotentes: reintentar una reserva no crea otra.
 - Cancelación gratuita hasta 2 horas antes de la sesión, con reembolso.
 - Emails de confirmación, cancelación y recordatorio.
-- Pago simulado o con Stripe en modo test.
+- Pago simulado, sin cargos reales.
 - Panel de administración: películas, salas, sesiones, bloqueo de sesiones y auditoría de reservas.
 
 Backend en TypeScript sobre AWS Lambda y DynamoDB, frontend en React y la infraestructura en Terraform.
@@ -23,7 +23,7 @@ flowchart LR
   U -->|WSS| WS[API Gateway WebSocket]
   U -->|registro y login| COG[Cognito]
 
-  API --> L[Lambdas<br/>catalog · booking · admin · stripe-webhook]
+  API --> L[Lambdas<br/>catalog · booking · admin]
   L -->|TransactWriteItems<br/>con condiciones| DB[(DynamoDB<br/>PITR 35 días)]
 
   DB -->|Streams| SP[Lambda stream-processor]
@@ -34,8 +34,6 @@ flowchart LR
   L --> SCH[EventBridge Scheduler]
   SCH --> HE[Lambda hold-expirer] --> DB
   SCH --> R[Lambda reminder] --> SES
-
-  L --> SM[Secrets Manager<br/>claves de Stripe]
 
   style DB fill:#f3b54a,color:#000
 ```
@@ -200,10 +198,9 @@ Uso de un proyecto académico en eu-west-1:
 | CloudFront y S3 | Dentro de la capa gratuita |
 | CodeBuild | 100 minutos gratis al mes; cada despliegue tarda ~2 min |
 | CodePipeline V2 | ~0,002 $ por minuto de ejecución |
-| Secrets Manager | 0,40 $ (1 secreto) |
-| CloudWatch: 14 alarmas (10 gratis) y logs | ~0,50 $ |
+| CloudWatch: 13 alarmas (10 gratis) y logs | ~0,50 $ |
 | DynamoDB PITR | Céntimos (la tabla ocupa pocos MB) |
-| **Total** | **~1–2 $/mes** |
+| **Total** | **~1 $/mes** |
 
 El presupuesto de AWS Budgets está en 10 $/mes.
 
