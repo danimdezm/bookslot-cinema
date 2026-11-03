@@ -49,11 +49,7 @@ export function CheckoutPage() {
     setPaying(true);
     setFailure(undefined);
     try {
-      const payment = await api.startPayment(holdId);
-      if (payment.provider !== 'mock') {
-        setFailure('El pago con Stripe se habilitará al desplegar en AWS. En local se usa el proveedor simulado.');
-        return;
-      }
+      await api.startPayment(holdId);
       const booking = await api.confirmHold(holdId);
       navigate(`/bookings/${booking.bookingId}`, { state: { fresh: true } });
     } catch (err) {
@@ -125,7 +121,7 @@ export function CheckoutPage() {
               </div>
 
               <p className="muted checkout__fine">
-                El cobro se simula en el entorno local. En producción, Stripe procesa el pago y la confirmación llega por webhook.
+                Pago simulado: no se realiza ningún cargo real.
               </p>
 
               {failure && <div className="alert">{failure}</div>}

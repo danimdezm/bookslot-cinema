@@ -15,9 +15,7 @@ export interface Hold {
 }
 
 export interface Payment {
-  provider: 'mock' | 'stripe';
   paymentId: string;
-  clientSecret: string | null;
   amountCents: number;
   currency: string;
   expiresAt: string;
