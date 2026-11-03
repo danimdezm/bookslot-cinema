@@ -14,9 +14,7 @@ export async function startPayment(holdId: string, userId: string, now = new Dat
   const intent = await payments.createPayment(hold);
   await attachPayment(holdId, intent.paymentId);
   return {
-    provider: payments.name,
     paymentId: intent.paymentId,
-    clientSecret: intent.clientSecret,
     amountCents: hold.amountCents,
     currency: hold.currency,
     expiresAt: hold.expiresAt,

@@ -18,9 +18,6 @@ export const config = {
   reminderHoursBefore: num('REMINDER_HOURS_BEFORE', 24),
   currency: 'eur',
 
-  paymentProvider: (process.env.PAYMENT_PROVIDER ?? 'mock') as 'mock' | 'stripe',
-  stripeSecretArn: process.env.STRIPE_SECRET_ARN,
-
   mailer: (process.env.MAILER ?? 'console') as 'ses' | 'smtp' | 'console',
   fromEmail: process.env.FROM_EMAIL ?? 'BookSlot Cinema <no-reply@bookslot.local>',
   smtpHost: process.env.SMTP_HOST ?? 'localhost',

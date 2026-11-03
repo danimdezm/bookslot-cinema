@@ -6,12 +6,11 @@ import { adminRouter } from '../api/admin';
 import { bookingRouter } from '../api/booking';
 import { catalogRouter } from '../api/catalog';
 import { healthRouter } from '../api/health';
-import { stripeRouter } from '../api/stripe';
 import { config } from '../config';
 import type { HttpEvent } from '../lib/http';
 import { log } from '../lib/logger';
 import { handleDomainEvent } from '../notify';
-import { services, setServices } from '../services';
+import { setServices } from '../services';
 import type { EventPublisher } from '../services/events';
 import type { Realtime } from '../services/realtime';
 import { processStreamRecords } from '../stream';
@@ -20,13 +19,13 @@ import { startStreamPoller } from './stream-poller';
 import { ensureTable } from './table';
 
 const PORT = Number(process.env.PORT ?? 3000);
-const routers = [healthRouter, catalogRouter, bookingRouter, adminRouter, stripeRouter];
+const routers = [healthRouter, catalogRouter, bookingRouter, adminRouter];
 
 const CORS = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'GET,POST,PUT,DELETE,OPTIONS',
   'access-control-allow-headers':
-    'authorization,content-type,idempotency-key,stripe-signature,x-user-id,x-user-email,x-user-groups',
+    'authorization,content-type,idempotency-key,x-user-id,x-user-email,x-user-groups',
 };
 
 const subscribers = new Map<string, Set<WebSocket>>();
@@ -129,7 +128,7 @@ await startStreamPoller(config.tableName, processStreamRecords);
 server.listen(PORT, () => {
   const routes = routers.flatMap((r) => r.definitions());
   console.log(`\nBookSlot API local → http://localhost:${PORT}  (WebSocket ws://localhost:${PORT}/ws?showId=...)`);
-  console.log(`Tabla ${config.tableName} @ ${config.dynamoEndpoint} · pagos: ${services().payments.name} · mailer: ${config.mailer}`);
+  console.log(`Tabla ${config.tableName} @ ${config.dynamoEndpoint} · mailer: ${config.mailer}`);
   console.log('Auth local: cabeceras X-User-Id, X-User-Email, X-User-Groups (admin)\n');
   for (const r of routes) console.log(`  ${r.method.padEnd(6)} ${r.path.padEnd(38)} ${r.access}`);
   console.log('');

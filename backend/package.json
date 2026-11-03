@@ -21,12 +21,10 @@
     "@aws-sdk/client-dynamodb-streams": "^3.1152.0",
     "@aws-sdk/client-eventbridge": "^3.1152.0",
     "@aws-sdk/client-scheduler": "^3.1152.0",
-    "@aws-sdk/client-secrets-manager": "^3.1152.0",
     "@aws-sdk/client-sesv2": "^3.1152.0",
     "@aws-sdk/lib-dynamodb": "^3.1152.0",
     "@aws-sdk/util-dynamodb": "^3.996.9",
     "nodemailer": "^10.1.7",
-    "stripe": "^23.0.0",
     "ws": "^8.22.0",
     "zod": "^4.6.7"
   },

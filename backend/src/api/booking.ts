@@ -1,7 +1,6 @@
 import { z } from 'zod';
-import { AppError, NotFoundError, ValidationError } from '../domain/errors';
+import { NotFoundError, ValidationError } from '../domain/errors';
 import { json, Router } from '../lib/http';
-import { services } from '../services';
 import { cancelBooking, getBooking, listUserBookings } from '../store/bookings';
 import { confirmPaidHold, startPayment } from '../store/checkout';
 import { createHold, getHold, releaseHold } from '../store/holds';
@@ -49,9 +48,6 @@ export const bookingRouter = new Router()
   )
 
   .post('/holds/{holdId}/confirm', 'user', async ({ params, user }) => {
-    if (services().payments.name !== 'mock') {
-      throw new AppError(400, 'USE_PAYMENT_PROVIDER', 'La confirmación llega por el webhook del proveedor de pagos');
-    }
     const hold = await getHold(params.holdId!);
     if (!hold || hold.userId !== user.id) throw new NotFoundError('Reserva temporal');
     if (hold.status === 'CONFIRMED') return json(200, await getBooking(hold.bookingId!));
