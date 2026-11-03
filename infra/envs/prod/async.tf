@@ -14,12 +14,6 @@ resource "aws_scheduler_schedule_group" "this" {
   name = local.name_prefix
 }
 
-resource "aws_secretsmanager_secret" "stripe" {
-  name                    = "${local.name_prefix}/stripe"
-  description             = "Claves de Stripe (modo test): secretKey y webhookSecret"
-  recovery_window_in_days = 0
-}
-
 resource "aws_sesv2_email_identity" "sender" {
   email_identity = var.sender_email
 }

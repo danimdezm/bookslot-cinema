@@ -1,6 +1,5 @@
 owner        = "daniel"
 alarm_email  = "tu-email@example.com"
 sender_email = "tu-email@example.com"
-# payment_provider    = "mock"
 # monthly_budget_usd  = 20
 # deletion_protection = true

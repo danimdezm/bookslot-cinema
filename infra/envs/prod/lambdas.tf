@@ -4,11 +4,6 @@ locals {
     TABLE_NAME = module.table.name
   }
 
-  env_payments = {
-    PAYMENT_PROVIDER  = var.payment_provider
-    STRIPE_SECRET_ARN = aws_secretsmanager_secret.stripe.arn
-  }
-
   env_scheduler = {
     SCHEDULER_GROUP    = aws_scheduler_schedule_group.this.name
     SCHEDULER_ROLE_ARN = aws_iam_role.scheduler.arn
@@ -28,7 +23,6 @@ locals {
   booking_policies = {
     table     = data.aws_iam_policy_document.table_write.json
     scheduler = data.aws_iam_policy_document.scheduler.json
-    stripe    = data.aws_iam_policy_document.stripe_secret.json
     events    = data.aws_iam_policy_document.events_publish.json
   }
 }
@@ -63,7 +57,7 @@ module "fn_booking" {
   source_dir           = "${local.backend_dist}/booking"
   timeout              = 15
   memory_size          = 512
-  environment          = merge(local.env_base, local.env_payments, local.env_scheduler, local.env_events)
+  environment          = merge(local.env_base, local.env_scheduler, local.env_events)
   policies             = local.booking_policies
 }
 
@@ -76,19 +70,7 @@ module "fn_admin" {
   source_dir           = "${local.backend_dist}/admin"
   timeout              = 29
   memory_size          = 512
-  environment          = merge(local.env_base, local.env_payments, local.env_scheduler, local.env_events)
-  policies             = local.booking_policies
-}
-
-module "fn_stripe_webhook" {
-  source               = "../../modules/lambda_node"
-  role_prefix          = local.role_prefix
-  permissions_boundary = local.permissions_boundary
-  name                 = "${local.name_prefix}-stripe-webhook"
-  description          = "Webhook de Stripe (firma verificada): confirma o reembolsa el hold pagado"
-  source_dir           = "${local.backend_dist}/stripe-webhook"
-  timeout              = 15
-  environment          = merge(local.env_base, local.env_payments, local.env_scheduler, local.env_events)
+  environment          = merge(local.env_base, local.env_scheduler, local.env_events)
   policies             = local.booking_policies
 }
 
@@ -170,7 +152,6 @@ locals {
     module.fn_catalog.function_name,
     module.fn_booking.function_name,
     module.fn_admin.function_name,
-    module.fn_stripe_webhook.function_name,
     module.fn_hold_expirer.function_name,
     module.fn_reminder.function_name,
     module.fn_notifier.function_name,

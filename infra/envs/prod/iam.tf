@@ -66,13 +66,6 @@ data "aws_iam_policy_document" "scheduler" {
   }
 }
 
-data "aws_iam_policy_document" "stripe_secret" {
-  statement {
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = [aws_secretsmanager_secret.stripe.arn]
-  }
-}
-
 data "aws_iam_policy_document" "events_publish" {
   statement {
     actions   = ["events:PutEvents"]

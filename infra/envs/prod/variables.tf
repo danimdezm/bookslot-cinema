@@ -38,17 +38,6 @@ variable "sender_email" {
   type        = string
 }
 
-variable "payment_provider" {
-  description = "mock (pago simulado con POST /holds/{id}/confirm) o stripe (requiere cargar el secreto)"
-  type        = string
-  default     = "mock"
-
-  validation {
-    condition     = contains(["mock", "stripe"], var.payment_provider)
-    error_message = "payment_provider debe ser mock o stripe."
-  }
-}
-
 variable "iam_role_prefix" {
   description = "Prefijo obligatorio de los roles IAM en la cuenta del laboratorio"
   type        = string

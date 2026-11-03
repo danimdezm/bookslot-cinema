@@ -54,7 +54,7 @@ resource "aws_iam_role_policy" "build" {
         Effect = "Allow"
         Action = [
           "apigateway:*", "lambda:*", "dynamodb:*", "cognito-idp:*", "ses:*", "sqs:*",
-          "events:*", "scheduler:*", "secretsmanager:*", "logs:*", "cloudwatch:*", "sns:*",
+          "events:*", "scheduler:*", "logs:*", "cloudwatch:*", "sns:*",
           "xray:*", "s3:*", "cloudfront:*", "budgets:*", "sts:GetCallerIdentity",
         ]
         Resource = "*"

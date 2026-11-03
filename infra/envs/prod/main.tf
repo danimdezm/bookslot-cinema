@@ -6,7 +6,6 @@ locals {
   booking = { function_name = module.fn_booking.function_name, invoke_arn = module.fn_booking.invoke_arn }
   admin   = { function_name = module.fn_admin.function_name, invoke_arn = module.fn_admin.invoke_arn }
   health  = { function_name = module.fn_health.function_name, invoke_arn = module.fn_health.invoke_arn }
-  webhook = { function_name = module.fn_stripe_webhook.function_name, invoke_arn = module.fn_stripe_webhook.invoke_arn }
 
   public_routes = {
     "GET /health"                 = local.health
@@ -14,7 +13,6 @@ locals {
     "GET /movies/{movieId}"       = local.catalog
     "GET /movies/{movieId}/shows" = local.catalog
     "GET /shows/{showId}"         = local.catalog
-    "POST /webhooks/stripe"       = local.webhook
   }
 
   private_routes = {
