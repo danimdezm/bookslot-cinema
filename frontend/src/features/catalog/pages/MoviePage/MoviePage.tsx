@@ -14,7 +14,9 @@ export function MoviePage() {
   const { data, error, loading, reload, days } = useMovieShows(movieId);
 
   const [day, setDay] = useState<string>();
-  useEffect(() => setDay(days[0]?.[0]), [days]);
+  useEffect(() => {
+    setDay(days[0]?.[0]);
+  }, [days]);
 
   if (loading) return <PageLoader />;
   if (error || !data) {
