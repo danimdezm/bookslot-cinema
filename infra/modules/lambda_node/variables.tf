@@ -34,11 +34,6 @@ variable "timeout" {
   default = 10
 }
 
-variable "reserved_concurrency" {
-  type    = number
-  default = -1
-}
-
 variable "log_retention_days" {
   type    = number
   default = 30

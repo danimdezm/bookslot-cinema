@@ -21,9 +21,7 @@ variable "jwt_audience" {
 }
 
 variable "cors_allow_origins" {
-  description = "Se restringirá al dominio de CloudFront en la fase del frontend"
-  type        = list(string)
-  default     = ["*"]
+  type = list(string)
 }
 
 variable "throttling_burst_limit" {

@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 resource "aws_cognito_user_pool" "this" {
   name                     = var.name
   username_attributes      = ["email"]

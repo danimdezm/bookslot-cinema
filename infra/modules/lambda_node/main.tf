@@ -53,17 +53,16 @@ resource "aws_iam_role_policy" "extra" {
 }
 
 resource "aws_lambda_function" "this" {
-  function_name                  = var.name
-  description                    = var.description
-  role                           = aws_iam_role.this.arn
-  runtime                        = "nodejs24.x"
-  architectures                  = ["arm64"]
-  handler                        = "index.handler"
-  filename                       = data.archive_file.this.output_path
-  source_code_hash               = data.archive_file.this.output_base64sha256
-  memory_size                    = var.memory_size
-  timeout                        = var.timeout
-  reserved_concurrent_executions = var.reserved_concurrency
+  function_name    = var.name
+  description      = var.description
+  role             = aws_iam_role.this.arn
+  runtime          = "nodejs24.x"
+  architectures    = ["arm64"]
+  handler          = "index.handler"
+  filename         = data.archive_file.this.output_path
+  source_code_hash = data.archive_file.this.output_base64sha256
+  memory_size      = var.memory_size
+  timeout          = var.timeout
 
   environment {
     variables = merge({ NODE_OPTIONS = "--enable-source-maps" }, var.environment)
