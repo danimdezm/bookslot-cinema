@@ -1,6 +1,12 @@
-module "events" {
-  source = "../../modules/events"
-  name   = local.name_prefix
+module "fn_websocket" {
+  source               = "../../modules/lambda_node"
+  name                 = "${local.name_prefix}-websocket"
+  description          = "$connect/$disconnect del API WebSocket (suscripción por sesión)"
+  source_dir           = "${local.backend_dist}/websocket"
+  environment          = local.env_base
+  policies             = { table = data.aws_iam_policy_document.table_write.json }
+  role_prefix          = local.role_prefix
+  permissions_boundary = local.permissions_boundary
 }
 
 module "websocket" {
@@ -10,14 +16,6 @@ module "websocket" {
   invoke_arn    = module.fn_websocket.invoke_arn
 }
 
-resource "aws_scheduler_schedule_group" "this" {
-  name = local.name_prefix
-}
-
-resource "aws_sesv2_email_identity" "sender" {
-  email_identity = var.sender_email
-}
-
 resource "aws_sqs_queue" "stream_dlq" {
   name                      = "${local.name_prefix}-stream-dlq"
   message_retention_seconds = 1209600
@@ -25,7 +23,7 @@ resource "aws_sqs_queue" "stream_dlq" {
 }
 
 resource "aws_lambda_event_source_mapping" "stream" {
-  function_name                      = module.fn_stream_processor.arn
+  function_name                      = module.lambda["stream-processor"].arn
   event_source_arn                   = module.table.stream_arn
   starting_position                  = "LATEST"
   batch_size                         = 100
@@ -47,12 +45,4 @@ resource "aws_lambda_event_source_mapping" "stream" {
       destination_arn = aws_sqs_queue.stream_dlq.arn
     }
   }
-}
-
-resource "aws_lambda_event_source_mapping" "notifications" {
-  function_name                      = module.fn_notifier.arn
-  event_source_arn                   = module.events.queue_arn
-  batch_size                         = 10
-  maximum_batching_window_in_seconds = 5
-  function_response_types            = ["ReportBatchItemFailures"]
 }

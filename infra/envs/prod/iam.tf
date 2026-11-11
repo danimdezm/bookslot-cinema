@@ -1,13 +1,3 @@
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
-
-locals {
-  role_prefix          = var.iam_role_prefix
-  permissions_boundary = var.permissions_boundary_name == "" ? null : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${var.permissions_boundary_name}"
-  table_resources      = [module.table.arn, "${module.table.arn}/index/*"]
-  schedules_arn        = "arn:aws:scheduler:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:schedule/${aws_scheduler_schedule_group.this.name}/*"
-}
-
 data "aws_iam_policy_document" "table_read" {
   statement {
     actions   = ["dynamodb:GetItem", "dynamodb:BatchGetItem", "dynamodb:Query"]
@@ -95,7 +85,7 @@ data "aws_iam_policy_document" "notifications_consume" {
 data "aws_iam_policy_document" "ses_send" {
   statement {
     actions   = ["ses:SendEmail"]
-    resources = ["arn:aws:ses:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:identity/*"]
+    resources = ["arn:aws:ses:${local.region}:${local.account_id}:identity/*"]
 
     condition {
       test     = "StringEquals"
@@ -117,7 +107,7 @@ data "aws_iam_policy_document" "scheduler_assume" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = [data.aws_caller_identity.current.account_id]
+      values   = [local.account_id]
     }
   }
 }
@@ -131,7 +121,7 @@ resource "aws_iam_role" "scheduler" {
 data "aws_iam_policy_document" "scheduler_invoke" {
   statement {
     actions   = ["lambda:InvokeFunction"]
-    resources = [module.fn_hold_expirer.arn, module.fn_reminder.arn]
+    resources = [module.lambda["hold-expirer"].arn, module.lambda["reminder"].arn]
   }
 }
 
