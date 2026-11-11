@@ -62,13 +62,6 @@
   padding: clamp(18px, 3vw, 28px);
 }
 
-.divider {
-  height: 1px;
-  background: var(--line);
-  border: 0;
-  margin: 20px 0;
-}
-
 .back-link {
   display: inline-flex;
   align-items: center;

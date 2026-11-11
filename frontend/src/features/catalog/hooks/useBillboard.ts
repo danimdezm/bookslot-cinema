@@ -2,7 +2,7 @@ import { useAsync } from '@/hooks';
 import { api } from '@/lib/api';
 import type { Movie, Show } from '@/types';
 
-export interface Billboard {
+interface Billboard {
   movies: Movie[];
   shows: Record<string, Show[]>;
 }

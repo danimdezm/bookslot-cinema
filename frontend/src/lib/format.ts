@@ -7,7 +7,6 @@ const fmt = (opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('es-ES
 
 export const time = (iso: string) => fmt({ hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
 export const dateLong = (iso: string) => fmt({ weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(iso));
-export const dateShort = (iso: string) => fmt({ day: 'numeric', month: 'short' }).format(new Date(iso));
 export const dateTime = (iso: string) => fmt({ day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
 
 export const dayKey = (iso: string) => fmt({ year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(iso));

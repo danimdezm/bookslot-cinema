@@ -5,7 +5,7 @@ export interface CognitoTokens {
   refreshToken: string;
 }
 
-export interface IdTokenClaims {
+interface IdTokenClaims {
   sub: string;
   email: string;
   name?: string;
@@ -25,7 +25,7 @@ const MESSAGES: Record<string, string> = {
   TooManyRequestsException: 'Demasiados intentos, espera unos minutos',
 };
 
-export class CognitoError extends Error {
+class CognitoError extends Error {
   constructor(
     readonly code: string,
     message: string,
