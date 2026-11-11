@@ -26,10 +26,13 @@ flowchart LR
   API --> L[Lambdas<br/>catalog · booking · admin]
   L -->|TransactWriteItems<br/>con condiciones| DB[(DynamoDB<br/>PITR 35 días)]
 
+  WS -->|conectar y desconectar| WSL[Lambda websocket] -->|conexiones| DB
+
   DB -->|Streams| SP[Lambda stream-processor]
   SP -->|auditoría y plazas libres| DB
   SP -->|cambios de butacas| WS
   SP --> EB[EventBridge] --> Q[SQS + DLQ] --> N[Lambda notifier] --> SES[SES<br/>emails]
+  L -->|reembolsos| EB
 
   L --> SCH[EventBridge Scheduler]
   SCH --> HE[Lambda hold-expirer] --> DB
@@ -166,6 +169,8 @@ aws cognito-idp admin-create-user --user-pool-id $POOL --username <email> \
 aws cognito-idp admin-set-user-password --user-pool-id $POOL --username <email> --password <password> --permanent
 aws cognito-idp admin-add-user-to-group --user-pool-id $POOL --username <email> --group-name admin
 ```
+
+El seed crea sesiones para los próximos 7 días. Pasada esa semana, hay que crear sesiones nuevas desde el panel de administración.
 
 ### 5. CI/CD
 
