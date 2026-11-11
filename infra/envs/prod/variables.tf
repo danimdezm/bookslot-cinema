@@ -49,3 +49,9 @@ variable "permissions_boundary_name" {
   type        = string
   default     = "StudentBoundary"
 }
+
+variable "dev_cors_origins" {
+  description = "Orígenes extra permitidos por CORS para desarrollo (p. ej. http://localhost:5174)"
+  type        = list(string)
+  default     = []
+}

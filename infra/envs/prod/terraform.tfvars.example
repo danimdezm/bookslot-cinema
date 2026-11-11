@@ -3,3 +3,4 @@ alarm_email  = "tu-email@example.com"
 sender_email = "tu-email@example.com"
 # monthly_budget_usd  = 20
 # deletion_protection = true
+# dev_cors_origins    = ["http://localhost:5174"]
