@@ -6,14 +6,18 @@ import {
   SoldOutError,
 } from '../../src/domain/errors';
 import type { User } from '../../src/domain/types';
-import { startStreamPoller } from '../../src/local/stream-poller';
-import { config } from '../../src/config';
-import { processStreamRecords } from '../../src/stream';
-import { blockShow } from '../../src/store/blocking';
-import { cancelBooking, getBooking, listAudit, listUserBookings } from '../../src/store/bookings';
-import { getShow, getShowAvailability, getShowSeats } from '../../src/store/catalog';
-import { confirmPaidHold } from '../../src/store/checkout';
-import { confirmHold, createHold, getHold, releaseHold } from '../../src/store/holds';
+import { startStreamPoller } from '../../src/local/simulators/stream-poller';
+import { config } from '../../src/shared/config';
+import { blockShow } from '../../src/modules/admin/admin.service';
+import { listAudit } from '../../src/modules/audit/audit.repository';
+import { findBooking } from '../../src/modules/bookings/bookings.repository';
+import { cancelBooking, listUserBookings } from '../../src/modules/bookings/bookings.service';
+import { listShowSeats } from '../../src/modules/catalog/seats.repository';
+import { findShow } from '../../src/modules/catalog/shows.repository';
+import { getShowAvailability } from '../../src/modules/catalog/catalog.service';
+import { findHold } from '../../src/modules/holds/holds.repository';
+import { confirmHold, confirmPaidHold, createHold, releaseHold } from '../../src/modules/holds/holds.service';
+import { processStreamRecords } from '../../src/modules/realtime/stream.service';
 import { minutesAgo, published, refunds, seedShow, setupTable, user } from './helpers';
 
 let cleanup: () => Promise<void>;
@@ -80,7 +84,7 @@ describe('expiración de holds', () => {
     expect((await releaseHold(hold.holdId, { reason: 'EXPIRED', actor: 'system' })).status).toBe('ACTIVE');
     const later = new Date(new Date(hold.expiresAt).getTime() + 1_000);
     expect((await releaseHold(hold.holdId, { reason: 'EXPIRED', actor: 'system', now: later })).status).toBe('EXPIRED');
-    expect((await getShowSeats(show.showId)).find((s) => s.seatId === 'E01')?.status).toBe('AVAILABLE');
+    expect((await listShowSeats(show.showId)).find((s) => s.seatId === 'E01')?.status).toBe('AVAILABLE');
   });
 
   it('un hold caducado se reclama (expiración perezosa) y su pago tardío se reembolsa', async () => {
@@ -101,12 +105,12 @@ describe('expiración de holds', () => {
     ).rejects.toBeInstanceOf(SoldOutError);
 
     await expect(confirmPaidHold(stale.holdId, 'pi_slow')).rejects.toBeInstanceOf(HoldNotConfirmableError);
-    expect((await getHold(stale.holdId))?.status).toBe('FAILED');
+    expect((await findHold(stale.holdId))?.status).toBe('FAILED');
     expect(refunds).toContain('pi_slow');
     expect(published).toContainEqual(expect.objectContaining({ type: 'PaymentRefunded' }));
 
     await releaseHold(stale.holdId, { reason: 'EXPIRED', actor: 'system' });
-    expect((await getShowSeats(show.showId)).find((s) => s.seatId === 'F01')?.holdId).toBe(fresh.holdId);
+    expect((await listShowSeats(show.showId)).find((s) => s.seatId === 'F01')?.holdId).toBe(fresh.holdId);
   });
 });
 
@@ -119,7 +123,7 @@ describe('bloqueo de sesiones', () => {
 
     const result = await blockShow(show.showId, admin, 'Mantenimiento');
     expect(result.cancelledBookings).toBe(1);
-    expect(await getBooking(booking.bookingId)).toMatchObject({ status: 'CANCELLED', refundStatus: 'REFUNDED' });
+    expect(await findBooking(booking.bookingId)).toMatchObject({ status: 'CANCELLED', refundStatus: 'REFUNDED' });
 
     await expect(
       createHold({ showId: show.showId, seatIds: ['G03'], user: user('b3'), idempotencyKey: key() }),
@@ -148,7 +152,7 @@ describe('stream processor (DynamoDB Streams local)', () => {
       expect((await listAudit('HOLD', hold.holdId)).map((a) => a.to)).toEqual(['ACTIVE', 'CONFIRMED']);
       expect(published).toContainEqual({ type: 'BookingConfirmed', detail: { bookingId: booking.bookingId } });
       expect(published).toContainEqual({ type: 'BookingCancelled', detail: { bookingId: booking.bookingId } });
-      await expect.poll(async () => (await getShow(show.showId))?.available, { timeout: 5_000 }).toBe(3);
+      await expect.poll(async () => (await findShow(show.showId))?.available, { timeout: 5_000 }).toBe(3);
     } finally {
       stop();
     }

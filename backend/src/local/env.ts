@@ -1,7 +1,4 @@
-try {
-  process.loadEnvFile('.env');
-} catch {
-}
+try { process.loadEnvFile('.env') } catch {}
 
 process.env.APP_ENV ??= 'local';
 process.env.AWS_REGION ??= 'eu-west-1';

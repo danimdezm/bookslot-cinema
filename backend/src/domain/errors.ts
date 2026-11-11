@@ -1,3 +1,5 @@
+import { ERROR_MESSAGES } from '../shared/messages/errors';
+
 export class AppError extends Error {
   constructor(
     readonly status: number,
@@ -18,25 +20,25 @@ export class ValidationError extends AppError {
 
 export class UnauthorizedError extends AppError {
   constructor() {
-    super(401, 'UNAUTHORIZED', 'Autenticación requerida');
+    super(401, 'UNAUTHORIZED', ERROR_MESSAGES.unauthorized);
   }
 }
 
 export class ForbiddenError extends AppError {
   constructor() {
-    super(403, 'FORBIDDEN', 'No tienes permisos para esta operación');
+    super(403, 'FORBIDDEN', ERROR_MESSAGES.forbidden);
   }
 }
 
 export class NotFoundError extends AppError {
   constructor(what: string) {
-    super(404, 'NOT_FOUND', `${what} no encontrado`);
+    super(404, 'NOT_FOUND', ERROR_MESSAGES.notFound(what));
   }
 }
 
 export class SoldOutError extends AppError {
   constructor(readonly seats: string[]) {
-    super(409, 'SOLD_OUT', 'Lo sentimos, se ha agotado: alguna de las butacas ya no está disponible', { seats });
+    super(409, 'SOLD_OUT', ERROR_MESSAGES.soldOut, { seats });
   }
 }
 
@@ -45,7 +47,7 @@ export class ShowNotBookableError extends AppError {
     super(
       409,
       'SHOW_NOT_BOOKABLE',
-      reason === 'BLOCKED' ? 'La sesión está bloqueada' : 'La sesión ya ha empezado',
+      reason === 'BLOCKED' ? ERROR_MESSAGES.showBlocked : ERROR_MESSAGES.showStarted,
       { reason },
     );
   }
@@ -53,7 +55,7 @@ export class ShowNotBookableError extends AppError {
 
 export class HoldNotConfirmableError extends AppError {
   constructor(readonly reason: string) {
-    super(409, 'HOLD_NOT_CONFIRMABLE', 'La reserva temporal ha caducado o ya no es válida', { reason });
+    super(409, 'HOLD_NOT_CONFIRMABLE', ERROR_MESSAGES.holdNotConfirmable, { reason });
   }
 }
 
@@ -65,6 +67,6 @@ export class PolicyError extends AppError {
 
 export class BusyError extends AppError {
   constructor() {
-    super(503, 'BUSY', 'Hay mucha demanda en este momento, inténtalo de nuevo');
+    super(503, 'BUSY', ERROR_MESSAGES.busy);
   }
 }

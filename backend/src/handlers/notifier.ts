@@ -1,7 +1,8 @@
 import type { SQSBatchResponse, SQSEvent } from 'aws-lambda';
-import { log } from '../lib/logger';
-import { handleDomainEvent } from '../notify';
-import type { DomainEvent } from '../services/events';
+import { handleDomainEvent } from '../modules/notifications/notifications.service';
+import type { DomainEvent } from '../providers/events';
+import { log } from '../shared/logger';
+import { LOG_MESSAGES } from '../shared/messages/logs';
 
 export const handler = async (event: SQSEvent): Promise<SQSBatchResponse> => {
   const batchItemFailures: SQSBatchResponse['batchItemFailures'] = [];
@@ -10,7 +11,7 @@ export const handler = async (event: SQSEvent): Promise<SQSBatchResponse> => {
       const envelope = JSON.parse(record.body) as { 'detail-type': DomainEvent['type']; detail: unknown };
       await handleDomainEvent({ type: envelope['detail-type'], detail: envelope.detail } as DomainEvent);
     } catch (err) {
-      log.error('Fallo procesando notificación', err, { messageId: record.messageId });
+      log.error(LOG_MESSAGES.notificationFailed, err, { messageId: record.messageId });
       batchItemFailures.push({ itemIdentifier: record.messageId });
     }
   }

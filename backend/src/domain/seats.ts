@@ -1,13 +1,13 @@
+import { SEAT_ID_PATTERN } from '../shared/constants';
+import { ERROR_MESSAGES } from '../shared/messages/errors';
 import { ValidationError } from './errors';
 import type { RoomRow, Seat } from './types';
-
-const SEAT_ID = /^([A-Z]{1,2})(\d{2,3})$/;
 
 export const seatId = (row: string, number: number) => `${row}${String(number).padStart(2, '0')}`;
 
 export function parseSeatId(id: string): { row: string; number: number } {
-  const match = SEAT_ID.exec(id);
-  if (!match) throw new ValidationError(`Identificador de butaca inválido: ${id}`);
+  const match = SEAT_ID_PATTERN.exec(id);
+  if (!match) throw new ValidationError(ERROR_MESSAGES.invalidSeatId(id));
   return { row: match[1]!, number: Number(match[2]) };
 }
 
@@ -19,8 +19,8 @@ export function seatsForRows(rows: RoomRow[]): { seatId: string; row: string; nu
 
 export function normalizeSeatIds(ids: string[], max: number): string[] {
   const unique = [...new Set(ids.map((s) => s.trim().toUpperCase()))];
-  if (unique.length === 0) throw new ValidationError('Selecciona al menos una butaca');
-  if (unique.length > max) throw new ValidationError(`Máximo ${max} butacas por reserva`);
+  if (unique.length === 0) throw new ValidationError(ERROR_MESSAGES.noSeatsSelected);
+  if (unique.length > max) throw new ValidationError(ERROR_MESSAGES.tooManySeats(max));
   unique.forEach(parseSeatId);
   return unique.sort();
 }

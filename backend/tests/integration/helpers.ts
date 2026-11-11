@@ -1,13 +1,13 @@
 import { randomUUID } from 'node:crypto';
-import { config } from '../../src/config';
+import { config } from '../../src/shared/config';
 import type { RoomRow } from '../../src/domain/types';
-import { createTable, deleteTable } from '../../src/local/table';
-import { setServices } from '../../src/services';
-import type { DomainEvent } from '../../src/services/events';
-import { MockPayments } from '../../src/services/payments';
-import { NoopRealtime } from '../../src/services/realtime';
-import { NoopScheduler } from '../../src/services/scheduler';
-import { createMovie, createRoom, createShow } from '../../src/store/catalog';
+import { createTable, deleteTable } from '../../src/local/database/table';
+import { setProviders } from '../../src/providers';
+import type { DomainEvent } from '../../src/providers/events';
+import { MockPayments } from '../../src/providers/payments';
+import { NoopRealtime } from '../../src/providers/realtime';
+import { NoopScheduler } from '../../src/providers/scheduler';
+import { createMovie, createRoom, createShow } from '../../src/modules/catalog/catalog.service';
 
 export const published: DomainEvent[] = [];
 export const refunds: string[] = [];
@@ -17,7 +17,7 @@ export async function setupTable(): Promise<() => Promise<void>> {
   await createTable(config.tableName);
 
   const payments = new MockPayments();
-  setServices({
+  setProviders({
     payments: Object.assign(payments, {
       refund: async (paymentId: string) => {
         refunds.push(paymentId);

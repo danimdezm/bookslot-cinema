@@ -1,8 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { PolicyError, SoldOutError } from '../../src/domain/errors';
 import { seatId } from '../../src/domain/seats';
-import { getShowSeats } from '../../src/store/catalog';
-import { confirmHold, createHold, getHold } from '../../src/store/holds';
+import { listShowSeats } from '../../src/modules/catalog/seats.repository';
+import { findHold } from '../../src/modules/holds/holds.repository';
+import { confirmHold, createHold } from '../../src/modules/holds/holds.service';
 import { seedShow, setupTable, user } from './helpers';
 
 let cleanup: () => Promise<void>;
@@ -36,14 +37,14 @@ describe('concurrencia', () => {
     expect(rejected).toHaveLength(N - M);
     for (const r of rejected) expect((r as PromiseRejectedResult).reason).toBeInstanceOf(SoldOutError);
 
-    const seats = await getShowSeats(show.showId);
+    const seats = await listShowSeats(show.showId);
     const winners = new Map(ok.map((r) => [(r as PromiseFulfilledResult<{ hold: { holdId: string; seats: string[] } }>).value.hold.holdId, r]));
     expect(seats.every((s) => s.status === 'HELD' && winners.has(s.holdId!))).toBe(true);
     expect(new Set(seats.map((s) => s.holdId)).size).toBe(M);
 
     const bookings = await settle([...winners.keys()].map((holdId) => confirmHold(holdId)));
     expect(bookings.filter((b) => b.status === 'fulfilled')).toHaveLength(M);
-    expect((await getShowSeats(show.showId)).every((s) => s.status === 'BOOKED')).toBe(true);
+    expect((await listShowSeats(show.showId)).every((s) => s.status === 'BOOKED')).toBe(true);
   });
 
   it('holds de varias butacas solapadas: ninguna butaca en dos holds y todo-o-nada', async () => {
@@ -70,7 +71,7 @@ describe('concurrencia', () => {
         held.set(s, r.value.hold.holdId);
       }
     }
-    for (const seat of await getShowSeats(show.showId)) {
+    for (const seat of await listShowSeats(show.showId)) {
       expect(seat.holdId).toBe(held.get(seat.seatId));
       expect(seat.status).toBe(held.has(seat.seatId) ? 'HELD' : 'AVAILABLE');
     }
@@ -86,7 +87,7 @@ describe('idempotencia', () => {
 
     expect(new Set(results.map((r) => r.hold.holdId)).size).toBe(1);
     expect(results.filter((r) => !r.replayed)).toHaveLength(1);
-    expect((await getHold(results[0]!.hold.holdId))?.status).toBe('ACTIVE');
+    expect((await findHold(results[0]!.hold.holdId))?.status).toBe('ACTIVE');
   });
 
   it('reutilizar la clave con otra petición → 422', async () => {

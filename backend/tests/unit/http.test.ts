@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { SoldOutError } from '../../src/domain/errors';
-import { json, Router, userFromEvent, type HttpEvent } from '../../src/lib/http';
+import { json, Router, userFromEvent, type HttpEvent } from '../../src/shared/http/router';
 
 const event = (method: string, path: string, opts: { claims?: Record<string, string>; body?: string } = {}) =>
   ({

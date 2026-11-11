@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "tsx watch src/local/server.ts",
     "start:local": "tsx src/local/server.ts",
-    "seed": "tsx src/local/seed.ts",
+    "seed": "tsx src/local/seed/seed.ts",
     "build": "tsx build.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run tests/unit",
