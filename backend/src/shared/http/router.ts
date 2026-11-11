@@ -76,9 +76,6 @@ export class Router {
   post(path: string, access: Access, handler: Handler) {
     return this.add('POST', path, access, handler);
   }
-  put(path: string, access: Access, handler: Handler) {
-    return this.add('PUT', path, access, handler);
-  }
   delete(path: string, access: Access, handler: Handler) {
     return this.add('DELETE', path, access, handler);
   }

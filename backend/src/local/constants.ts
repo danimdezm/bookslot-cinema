@@ -2,7 +2,7 @@ export const PORT = Number(process.env.PORT ?? 3000);
 
 export const CORS_HEADERS = {
   'access-control-allow-origin': '*',
-  'access-control-allow-methods': 'GET,POST,PUT,DELETE,OPTIONS',
+  'access-control-allow-methods': 'GET,POST,DELETE,OPTIONS',
   'access-control-allow-headers': 'authorization,content-type,idempotency-key,x-user-id,x-user-email,x-user-groups',
 };
 
