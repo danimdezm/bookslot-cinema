@@ -59,7 +59,7 @@ API Gateway + Lambda (Node.js 24) + DynamoDB on-demand, con Cognito, SES, EventB
 
 ### Cómo se evita el overbooking
 
-Cada butaca de cada sesión es un ítem en DynamoDB con su estado: `AVAILABLE`, `HELD` o `BOOKED`. Reservar es una única `TransactWriteItems` ([backend/src/store/holds.ts](backend/src/store/holds.ts)) que hace, **todo o nada**:
+Cada butaca de cada sesión es un ítem en DynamoDB con su estado: `AVAILABLE`, `HELD` o `BOOKED`. Reservar es una única `TransactWriteItems` ([backend/src/modules/holds/holds.transactions.ts](backend/src/modules/holds/holds.transactions.ts)) que hace, **todo o nada**:
 
 1. Cambia cada butaca de `AVAILABLE` a `HELD`, **con la condición** de que siga libre (o retenida por una reserva ya caducada).
 2. Guarda la clave de idempotencia, con la condición de que no exista.
@@ -80,11 +80,10 @@ El pago (`HELD → BOOKED`) es otra transacción, condicionada a que las butacas
 [scripts/concurrency-test.sh](scripts/concurrency-test.sh) lanza N reservas simultáneas con `curl` + `xargs -P` sobre una sala de M butacas (N > M). Salida en [docs/concurrency-test-output.txt](docs/concurrency-test-output.txt):
 
 ```
--- Fase 1: 100 reservas simultáneas
-   201 CONFIRMED (hold)  = 20   (esperado 20)
-   409 SOLD_OUT          = 80   (esperado 80)
-   butacas duplicadas    = 0
-RESULTADO: OK — sin overbooking (20 de 100) e idempotencia correcta
+Aceptadas (201):      20  (esperado 20)
+Agotadas (409):       80  (esperado 80)
+Butacas duplicadas:   0
+RESULTADO: OK, sin overbooking
 ```
 
 ### Backups
