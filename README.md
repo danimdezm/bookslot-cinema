@@ -128,8 +128,6 @@ N=100 M=20 scripts/concurrency-test.sh
 
 ## Despliegue en AWS
 
-La cuenta usada es de laboratorio. Solo permite crear roles IAM con prefijo `student-` y con el permissions boundary `StudentBoundary`. Ambos están configurados como valores por defecto en Terraform.
-
 ### 1. Bucket del estado de Terraform (una vez)
 
 ```bash
@@ -192,8 +190,6 @@ Después hay que aprobar la conexión `bookslot-github` en la consola de AWS (De
 El rol del pipeline no puede crear ni modificar roles IAM por el boundary del laboratorio. Los cambios de permisos se aplican en local con `terraform apply`.
 
 ## Coste mensual estimado
-
-Uso de un proyecto académico en eu-west-1:
 
 | Servicio | Coste |
 |---|---|
