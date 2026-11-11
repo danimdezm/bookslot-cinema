@@ -30,8 +30,7 @@ curl_auth() {
 export -f curl_auth
 export API AUTH_MODE ADMIN_TOKEN="${ADMIN_TOKEN:-}" TOKENS_FILE="${TOKENS_FILE:-}"
 
-echo "== BookSlot · prueba de concurrencia"
-echo "   API=$API  N=$N peticiones simultáneas  M=$M butacas  K=$K reintentos idempotentes"
+echo "Prueba de concurrencia: $N reservas a la vez sobre $M butacas"
 
 movie=$(curl_auth admin -sf -X POST "$API/admin/movies" -H 'content-type: application/json' \
   -d "{\"title\":\"Concurrency $RUN\",\"durationMinutes\":90}" | jq -r .movieId)
@@ -40,7 +39,6 @@ room=$(curl_auth admin -sf -X POST "$API/admin/rooms" -H 'content-type: applicat
 starts=$(date -u -v+2d +%Y-%m-%dT20:00:00Z 2>/dev/null || date -u -d '+2 days' +%Y-%m-%dT20:00:00Z)
 show=$(curl_auth admin -sf -X POST "$API/admin/shows" -H 'content-type: application/json' \
   -d "{\"movieId\":\"$movie\",\"roomId\":\"$room\",\"startsAt\":\"$starts\",\"priceCents\":800}" | jq -r .showId)
-echo "   sesión $show"
 
 hold_request() {
   local i="$1" seat body code
@@ -53,21 +51,13 @@ hold_request() {
 export -f hold_request
 export SHOW="$show" M RUN
 
-start_ms=$(($(date +%s) * 1000))
 seq 0 $((N - 1)) | xargs -P "$N" -I{} bash -c 'hold_request {}' > "$WORK/holds.txt"
-elapsed=$(( $(date +%s) * 1000 - start_ms ))
 
 confirmed=$(awk '$3 == 201' "$WORK/holds.txt" | wc -l | tr -d ' ')
 soldout=$(awk '$3 == 409 && $4 == "SOLD_OUT"' "$WORK/holds.txt" | wc -l | tr -d ' ')
 other=$(awk '$3 != 201 && !($3 == 409 && $4 == "SOLD_OUT")' "$WORK/holds.txt" | wc -l | tr -d ' ')
 dup_seats=$(awk '$3 == 201 {print $2}' "$WORK/holds.txt" | sort | uniq -d | wc -l | tr -d ' ')
 
-echo
-echo "-- Fase 1: $N reservas simultáneas (~${elapsed} ms)"
-echo "   201 CONFIRMED (hold)  = $confirmed   (esperado $M)"
-echo "   409 SOLD_OUT          = $soldout   (esperado $((N - M)))"
-echo "   otros códigos         = $other"
-echo "   butacas duplicadas    = $dup_seats"
 
 confirm_request() {
   curl_auth "$1" -s -o /dev/null -w '%{http_code}\n' -X POST "$API/holds/$2/confirm"
@@ -80,11 +70,6 @@ availability=$(curl -sf "$API/shows/$show")
 available=$(jq '.show.available' <<< "$availability")
 booked_seats=$(jq '[.seats[] | select(.status == "BOOKED")] | length' <<< "$availability")
 
-echo
-echo "-- Fase 2: confirmación de pago de los $confirmed holds"
-echo "   reservas confirmadas  = $booked   (esperado $M)"
-echo "   butacas BOOKED        = $booked_seats   (esperado $M)"
-echo "   plazas libres         = $available   (esperado 0)"
 
 idem_request() {
   curl_auth idem -s -X POST "$API/shows/$SHOW2/holds" -H 'content-type: application/json' \
@@ -99,15 +84,19 @@ unique_holds=$(sort -u "$WORK/idem.txt" | wc -l | tr -d ' ')
 held_after=$(curl -sf "$API/shows/$show2" | jq '[.seats[] | select(.status != "AVAILABLE")] | length')
 
 echo
-echo "-- Fase 3: $K reintentos simultáneos con la misma Idempotency-Key"
-echo "   holds distintos       = $unique_holds   (esperado 1)"
-echo "   butacas retenidas     = $held_after   (esperado 2)"
-
+echo "Aceptadas (201):      $confirmed  (esperado $M)"
+echo "Agotadas (409):       $soldout  (esperado $((N - M)))"
+echo "Otros errores:        $other"
+echo "Butacas duplicadas:   $dup_seats"
+echo "Pagadas:              $booked  (esperado $M)"
+echo "Plazas libres:        $available  (esperado 0)"
+echo "Idempotencia:         $unique_holds reserva para $K reintentos"
 echo
+
 if [[ "$confirmed" == "$M" && "$soldout" == "$((N - M))" && "$other" == 0 && "$dup_seats" == 0 \
    && "$booked" == "$M" && "$booked_seats" == "$M" && "$available" == 0 \
    && "$unique_holds" == 1 && "$held_after" == 2 ]]; then
-  echo "RESULTADO: OK — sin overbooking ($M de $N) e idempotencia correcta"
+  echo "RESULTADO: OK, sin overbooking"
 else
   echo "RESULTADO: FALLO"
   exit 1
