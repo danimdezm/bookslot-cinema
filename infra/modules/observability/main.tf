@@ -6,13 +6,13 @@ resource "aws_sns_topic" "alarms" {
 
 data "aws_iam_policy_document" "alarms_topic" {
   statement {
-    sid       = "AllowCloudWatchAndBudgets"
+    sid       = "AllowCloudWatch"
     actions   = ["sns:Publish"]
     resources = [aws_sns_topic.alarms.arn]
 
     principals {
       type        = "Service"
-      identifiers = ["cloudwatch.amazonaws.com", "budgets.amazonaws.com"]
+      identifiers = ["cloudwatch.amazonaws.com"]
     }
 
     condition {
